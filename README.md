@@ -1,4 +1,4 @@
-# Python-Lambda
+# CoinStatData-Python-Stat-Lambda
 
 Window:
 - py -3 -m venv venv
@@ -11,8 +11,16 @@ Mac:
 
 
 ```
-$ pip install stuff
+## Deploying
+
 $ pip freeze > requirements.txt
 $ cat requirements.txt
+$ chalice deploy
+```
+
+```
+## Local setup
+
+$ pip install -r /path/to/requirements.txt
 $ flask --app app --debug run
 ```

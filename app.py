@@ -1,5 +1,5 @@
 from chalice import Chalice
-from src.commands import controller, actions
+from chalicelib.commands import controller, actions
 import json
 from flask import Flask, request
 
@@ -8,6 +8,7 @@ app = Chalice(app_name='CoinStatData-Stat-Lambda')
 
 @app.lambda_function()
 def handler(event, context):
+	print("########### event ==> " + str(event))
 	actionType = event['body']['action']
 	if actionType in actions.STAT.values():
 		body = controller.stat_process(actionType, event)
