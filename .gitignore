@@ -1,5 +1,7 @@
 test/tp.py
-venv/lib
 venv37
 __pycache__
 .chalice
+venv
+.env
+vendor

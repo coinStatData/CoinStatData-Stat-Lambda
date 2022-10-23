@@ -4,13 +4,14 @@ import matplotlib.pyplot as plt
 import requests
 from io import BytesIO
 import base64
+import os
 
-api_url = 'https://api.coingecko.com/api/v3/coins/{}/market_chart?vs_currency=usd&days={}&interval=daily'
 #global variables
 price_data = {}
 normalized_data = {}
 log_return = {}
 cryptos = []
+coin_fetch_url = os.getenv('COIN_DAILY_URL')
 
 def process(event):
   cryptos = event['body']['cryptos']
@@ -19,21 +20,21 @@ def process(event):
   return resp
 
 def efficientFrontier(crypto, days):
-    global cryptos
-    cryptos = crypto
-    return plotPriceComparison(crypto, days)
+	global cryptos
+	cryptos = crypto
+	return plotPriceComparison(crypto, days)
 
 
 def get_crypto_data(coin, days):
-    json_url = api_url.format(coin, days)
-    resp = requests.get(json_url)
-    bjson = resp.json()
-    prices = bjson["prices"]
-    df_price = pd.DataFrame(prices)  
-    df_price = df_price.rename({0: 'date', 1: 'price'}, axis=1)  # new method
-    df_price = df_price.set_index('date')
-    df_price.head();
-    return df_price
+	json_url = coin_fetch_url.format(coin, days)
+	resp = requests.get(json_url)
+	bjson = resp.json()
+	prices = bjson["prices"]
+	df_price = pd.DataFrame(prices)  
+	df_price = df_price.rename({0: 'date', 1: 'price'}, axis=1)  # new method
+	df_price = df_price.set_index('date')
+	df_price.head();
+	return df_price
 
 def sharpRatio():
 	global log_return

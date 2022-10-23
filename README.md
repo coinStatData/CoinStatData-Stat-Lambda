@@ -1,13 +1,14 @@
 # CoinStatData-Python-Stat-Lambda
 
 Window:
-- py -3 -m venv venv
+- py -3 -m venv venv OR virtualenv --python=python3.10.8 venv
 - venv\Scripts\activate
-- python3 -m pip install chalice
+- pip install stuff
 
 Mac:
 - python3 -m venv venv
-- venv/bin/activate
+- . venv/bin/activate
+- pip install stuff
 
 
 ```
@@ -16,6 +17,8 @@ Mac:
 $ pip freeze > requirements.txt
 $ cat requirements.txt
 $ chalice deploy
+  or
+$ chalice --debug deploy --stage dev --connection-timeout 360
 ```
 
 ```
