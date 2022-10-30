@@ -1,10 +1,14 @@
-import pandas as pd
-import numpy as np
-import matplotlib.pyplot as plt
+
 import requests
 from io import BytesIO
 import base64
 import os
+
+if 'AWS_EXECUTION_ENV' in os.environ:
+	# Running in Lambda, need to import modules.
+	import pandas as pd
+	import numpy as np
+	import matplotlib.pyplot as plt
 
 #global variables
 price_data = {}
@@ -14,15 +18,16 @@ cryptos = []
 coin_fetch_url = os.getenv('COIN_DAILY_URL')
 
 def process(event):
-  cryptos = event['body']['cryptos']
-  days = event['body']['days']
-  resp = efficientFrontier(cryptos, days)
-  return resp
+	cryptos = event['cryptos']
+	days = event['days']
+	num_ports = event['portCount']
+	resp = efficientFrontier(cryptos, days, num_ports)
+	return resp
 
-def efficientFrontier(crypto, days):
+def efficientFrontier(crypto, days, num_ports):
 	global cryptos
 	cryptos = crypto
-	return plotPriceComparison(crypto, days)
+	return plotPriceComparison(crypto, days, num_ports)
 
 
 def get_crypto_data(coin, days):
@@ -36,7 +41,7 @@ def get_crypto_data(coin, days):
 	df_price.head();
 	return df_price
 
-def sharpRatio():
+def sharpRatio(num_ports):
 	global log_return
 	log_ret = log_return
 	global normalized_data
@@ -48,7 +53,6 @@ def sharpRatio():
 	log_ret.describe().transpose()
 	log_ret.mean() * 600
 	log_ret.cov()
-	num_ports = 3000
 	all_weights = np.zeros((num_ports,len(dfp.columns)))
 	ret_arr = np.zeros(num_ports)
 	vol_arr = np.zeros(num_ports)
@@ -103,7 +107,7 @@ def sharpRatio():
 	response["images"]["efficientFrontier"] = img_base64
 	return response
 
-def plotPriceComparison(crypto, days):
+def plotPriceComparison(crypto, days, num_ports):
 	crypto_data = {}
 	for coin in crypto:
 		crypto_price_df = get_crypto_data(coin, days)
@@ -122,5 +126,5 @@ def plotPriceComparison(crypto, days):
 
 	global log_return 
 	log_return = log_ret
-	return sharpRatio()
+	return sharpRatio(num_ports)
 

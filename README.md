@@ -1,7 +1,7 @@
 # CoinStatData-Python-Stat-Lambda
 
 Window:
-- py -3 -m venv venv OR virtualenv --python=python3.10.8 venv
+- py -3 -m venv venv OR virtualenv --python=python3.9 venv
 - venv\Scripts\activate
 - pip install stuff
 
